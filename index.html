@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>iam-policy-json-to-terraform - Easily convert AWS IAM policies to Terraform HCL</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="This tool converts standard IAM policies in JSON format (like what you'd find in the AWS docs) into more terraform native aws_iam_policy_document data source code">
+    <style>
+        html, body {
+            height: 100%
+        }
+        .mainContainer {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: nowrap;
+            height: 95%;
+        }
+
+        .textContainer {
+            flex-basis: 45%;
+            flex-flow: column nowrap;
+            display: flex;
+        }
+
+        .textContainer textarea {
+            flex-basis: 100%;
+        }
+
+        .buttonContainer {
+            flex-basis: 10%;
+            flex-flow: row nowrap;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .buttonContainer button {
+            width: 80%;
+            height: 10em;
+        }
+    </style>
+</head>
+<body>
+<div class="mainContainer">
+    <div class="textContainer">
+        <label for="input">Input: IAM Policy Document (in JSON format)</label>
+        <textarea id="input" autofocus>{}</textarea>
+    </div>
+    <div class="buttonContainer">
+        <button id="doConvert"
+                data-goatcounter-click="convert-button-clicked"
+                data-goatcounter-title="Convert-button was clicked">&gt;
+        </button>
+    </div>
+    <div class="textContainer">
+        <label for="output">Output: Terraform</label>
+        <textarea id="output" readonly></textarea>
+    </div>
+</div>
+<div>
+    <a href="javascript:if(document.getSelection){s=document.getSelection();}else{s= '{}';};document.location='https://flosell.github.io/iam-policy-json-to-terraform/#content='+encodeURIComponent(s)">Bookmarklet</a> drag this into your bookmarks; select a valid IAM policy on any page and click the bookmark to convert in one click
+</div>
+<script src="web.js"></script>
+<script type="application/javascript">
+    let inputTextBox = document.getElementById("input")
+    let outputTextBox = document.getElementById("output")
+    function convertToHcl() {
+        let output
+        try {
+            output = convert("hello", inputTextBox.value)
+        } catch (e) {
+            output = "Could not convert:\n" + e.message
+        }
+        outputTextBox.value = output
+    }
+    document.getElementById("doConvert").addEventListener("click", convertToHcl)
+
+    let h = document.location.hash
+    let r = /content=(.+)/
+    let m = r.exec(h)
+    if (m) {
+        inputTextBox.value = decodeURIComponent(m[1])
+    }
+    convertToHcl()
+</script>
+<script data-goatcounter="https://flosell.goatcounter.com/count"
+        src="https://gc.zgo.at/count.v2.js"
+        crossorigin="anonymous"
+        integrity="sha384-PeYXrhTyEaBBz91ANMgpSbfN1kjioQNPHNDbMvevUVLJoWrVEjDCpKb71TehNAlj"></script>
+</body>
+</html>
